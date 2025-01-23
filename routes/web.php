@@ -4,6 +4,7 @@ use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\TournamentController;
+use App\Http\Controllers\XMLController;
 use App\Models\MatchParticipant;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -32,5 +33,6 @@ Route::resource('tournament', TournamentController::class);
 Route::resource('participant', ParticipantController::class);
 Route::resource('match-participant', MatchParticipant::class);
 Route::resource('school', SchoolController::class);
+Route::resource('xml', XMLController::class);
 
 require __DIR__.'/auth.php';

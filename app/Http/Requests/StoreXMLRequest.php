@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
-class CreateSchoolRequest extends FormRequest
+class StoreXMLRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +23,7 @@ class CreateSchoolRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'unique:schools,name'],
-            'city' => ['required', 'string'],
-            'country' => ['required', 'string']
+            'xmlData' => ['required', 'string']
         ];
     }
 }
