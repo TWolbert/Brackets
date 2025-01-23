@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateParticipantRequest;
 use App\Models\Participant;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ParticipantController extends Controller
 {
@@ -20,15 +22,16 @@ class ParticipantController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render("participant/create");
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateParticipantRequest $request)
     {
-        //
+        $participant = Participant::create($request->validated());
+        return redirect(route("participant.create"))->with("success","");
     }
 
     /**

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateMatchParticipantRequest;
 use App\Models\MatchParticipant;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class MatchParticipantController extends Controller
 {
@@ -20,15 +22,15 @@ class MatchParticipantController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render("matchparticipant/create");
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateMatchParticipantRequest $request)
     {
-        //
+        $participant = MatchParticipant::create($request->validated());
     }
 
     /**

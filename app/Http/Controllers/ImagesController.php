@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateSchoolRequest;
-use App\Models\School;
+use App\Models\Images;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
-class SchoolController extends Controller
+class ImagesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,22 +20,21 @@ class SchoolController extends Controller
      */
     public function create()
     {
-        return Inertia::render("school/create");
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateSchoolRequest $request)
+    public function store(Request $request)
     {
-        School::create($request->validated());
-        return redirect()->route("school.index")->with("success", true);
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(School $school)
+    public function show(Images $images)
     {
         //
     }
@@ -45,7 +42,7 @@ class SchoolController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(School $school)
+    public function edit(Images $images)
     {
         //
     }
@@ -53,7 +50,7 @@ class SchoolController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, School $school)
+    public function update(Request $request, Images $images)
     {
         //
     }
@@ -61,7 +58,7 @@ class SchoolController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(School $school)
+    public function destroy(Images $images)
     {
         //
     }
