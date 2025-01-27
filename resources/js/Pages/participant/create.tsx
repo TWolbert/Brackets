@@ -2,7 +2,6 @@ import { PageProps } from "@/types";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { IconButton } from "@/Components/IconButton";
 import { PersonAdd, Plus } from "react-bootstrap-icons";
-import { useState } from "react";
 import { useForm } from "@inertiajs/react";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
