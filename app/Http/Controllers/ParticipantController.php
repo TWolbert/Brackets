@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateParticipantRequest;
 use App\Models\Participant;
+use App\Models\School;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -22,7 +23,9 @@ class ParticipantController extends Controller
      */
     public function create()
     {
-        return Inertia::render("participant/create");
+        return Inertia::render("participant/create", [
+            'schools' => School::all(),
+        ]);
     }
 
     /**
