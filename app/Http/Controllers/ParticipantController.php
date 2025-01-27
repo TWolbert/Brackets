@@ -28,9 +28,6 @@ class ParticipantController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(CreateParticipantRequest $request)
     {
         $participant = Participant::create($request->validated());
