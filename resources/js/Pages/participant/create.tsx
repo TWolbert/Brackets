@@ -47,7 +47,6 @@ export default function Create({ auth, schools }: PageProps<{ schools: School[] 
                         <option key={school.id} value={school.id}>{school.name}</option>
                     ))}
                 </select>
-                {/* Hidden input for image_id */}
                 <input type="hidden" name="image_id" value={data.image_id} />
                 <IconButton icon={<PersonAdd className="text-xl" />} text="Create participant" onClick={() => {}} />
             </form>
