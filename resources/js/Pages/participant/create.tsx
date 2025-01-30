@@ -5,12 +5,7 @@ import { PersonAdd, Plus } from "react-bootstrap-icons";
 import { useForm } from "@inertiajs/react";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
-type School = {
-    id: number;
-    name: string;
-    city: string;
-    country: string;
-}
+import { School } from "@/types/models";
 
 export default function Create({ auth, schools }: PageProps<{ schools: School[] }>) {
     const { data, setData, post, processing, errors } = useForm({

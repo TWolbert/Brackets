@@ -15,7 +15,12 @@ class ParticipantController extends Controller
      */
     public function index()
     {
-        //
+        $participants = Participant::all();
+        // Load school relation on all
+        $participants->load("school");
+        return Inertia::render("participant/index", [
+            "participants"=> $participants
+        ]);
     }
 
     public function create()

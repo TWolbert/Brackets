@@ -15,4 +15,9 @@ class Participant extends Model
         'school_id',
         'image_id'
     ];
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
 }

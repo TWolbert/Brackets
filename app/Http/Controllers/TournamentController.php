@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Participant;
 use App\Models\Tournament;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -21,7 +22,9 @@ class TournamentController extends Controller
      */
     public function create()
     {
-        return Inertia::render("tournament/create");
+        return Inertia::render("tournament/create", [
+            "participants"=> Participant::all()->load("school"),
+        ]);
     }
 
     /**
