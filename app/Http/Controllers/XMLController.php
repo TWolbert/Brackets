@@ -66,7 +66,7 @@ class XMLController extends Controller
         }   
 
         // Return redirect with success
-        return redirect()->route('xml.index')->with('success', 'Players added');
+        return redirect()->route('xml.index')->with('success', true);
     }
 
     /**

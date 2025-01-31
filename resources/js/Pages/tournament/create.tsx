@@ -3,7 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { IconButton } from "@/Components/IconButton";
 import { Plus } from "react-bootstrap-icons";
 import { Participant } from "@/types/models";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "@inertiajs/react";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 
 export default function Create({ auth, participants }: PageProps<{ participants: Participant[] }>) {
     const [selectableParticipants, setSelectableParticipants] = useState<Participant[]>(participants);
+    const [neededParticipants, setNeededParticipants] = useState(0);
 
     const { data, setData, post, processing, errors } = useForm({
         name: '',
@@ -28,6 +29,18 @@ export default function Create({ auth, participants }: PageProps<{ participants:
         setSelectableParticipants(selectableParticipants.filter((p) => p.id !== participant.id));
         e.target.value = '0';
     }
+
+    useEffect(() => {
+        // Find next biggest power of 2 from the number of participants
+        const participants = data.tournamentParticipants.length;
+        let needed = 2;
+
+        while (needed < participants) {
+            needed *= 2;
+        }
+
+        setNeededParticipants(needed);
+    }, [data.tournamentParticipants.length]);
 
     const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         // Check if date is in the future 
@@ -64,9 +77,9 @@ export default function Create({ auth, participants }: PageProps<{ participants:
             <div className="mx-auto w-fit">
                 <form method="POST" action="/tournaments">
                     <div className="flex gap-2">
-                        <div className="bg-white p-3 shadow-md rounded-md mt-3 gap-3 w-fit">
+                        <div className="gap-3 p-3 mt-3 bg-white rounded-md shadow-md w-fit">
                             <div className="flex gap-2">
-                                <select name="participants" onChange={handleSelectChange} className="border border-gray-300 rounded-md p-2 pr-10">
+                                <select name="participants" onChange={handleSelectChange} className="p-2 pr-10 border border-gray-300 rounded-md">
                                     <option value={0}>Select a participant</option>
                                     {selectableParticipants.map((participant) => (
                                         <option key={participant.id} value={participant.id}>{participant.name} {participant.lastname}</option>
@@ -75,13 +88,13 @@ export default function Create({ auth, participants }: PageProps<{ participants:
                                 <IconButton icon={<Plus className="text-xl" />} text="Create tournament" onClick={() => { }} />
                             </div>
                             {data.tournamentParticipants.length === 0 ?
-                                <div className="flex justify-center items-center h-full">
+                                <div className="flex items-center justify-center h-full">
                                     <p>No participants selected</p>
                                 </div>
                                 :
                                 <div>
                                     <p>
-                                        Participants <span className="font-bold">({data.tournamentParticipants.length})</span>
+                                        Participants <span className="font-bold">{data.tournamentParticipants.length}/{neededParticipants} ({neededParticipants - data.tournamentParticipants.length} {neededParticipants - data.tournamentParticipants.length === 1 ? "\"bye\"" : "\"bye's\""} will be made)</span>
                                     </p>
                                     {data.tournamentParticipants.map((participant) => (
                                         <TournamentParticipant key={participant.id} participant={participant} />
@@ -89,14 +102,14 @@ export default function Create({ auth, participants }: PageProps<{ participants:
                                 </div>
                             }
                         </div>
-                        <div className="bg-white p-3 shadow-md rounded-md mt-3 gap-3 w-fit">
-                            <h1 className="font-bold text-xl">Tournament info</h1>
+                        <div className="gap-3 p-3 mt-3 bg-white rounded-md shadow-md w-fit h-fit">
+                            <h1 className="text-xl font-bold">Tournament info</h1>
                             <InputLabel htmlFor="name" value="Name" />
                             <TextInput id="name" type="text" name="name" value={data.name} onChange={(e) => setData('name', e.target.value)} />
                             <InputLabel htmlFor="start_date" value="Start date" />
-                            <input id="start_date" type="date" name="start_date" value={data.start_date} onChange={handleStartDateChange} className='rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 w-full' />
+                            <input id="start_date" type="date" name="start_date" value={data.start_date} onChange={handleStartDateChange} className='w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500' />
                             <InputLabel htmlFor="end_date" value="End date" />
-                            <input id="end_date" type="date" name="end_date" value={data.end_date} onChange={handleEndDateChange} className='rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 w-full' />
+                            <input id="end_date" type="date" name="end_date" value={data.end_date} onChange={handleEndDateChange} className='w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500' />
                         </div>
                     </div>
 
@@ -108,10 +121,10 @@ export default function Create({ auth, participants }: PageProps<{ participants:
 
 function TournamentParticipant({ participant }: { participant: Participant }) {
     return (
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
             <div>
                 <h2>{participant.name} {participant.lastname}</h2>
-                <p className=" text-gray-700 font-bold">{participant.school.name}</p>
+                <p className="font-bold text-gray-700 ">{participant.school.name}</p>
             </div>
         </div>
     )

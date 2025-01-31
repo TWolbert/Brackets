@@ -15,4 +15,9 @@ class School extends Model
         'city',
         'country'
     ];
+
+    public function participants()
+    {
+        return $this->hasMany(Participant::class);
+    }
 }
