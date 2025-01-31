@@ -32,8 +32,8 @@ class ParticipantController extends Controller
 
     public function store(CreateParticipantRequest $request)
     {
-        $participant = Participant::create($request->validated());
-        return redirect(route("participant.create"))->with("success","");
+        Participant::create($request->validated());
+        return redirect(route("participant.index"))->with("success",true);
     }
 
     /**

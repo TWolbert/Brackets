@@ -25,8 +25,8 @@ class CreateParticipantRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'lastname' => ['required', 'string'],
-            'school_id' => ['required', 'integer', 'exists:schools'],
-            'image_id' => ['required', 'integer', 'exists:images']
+            'school_id' => ['required', 'integer', 'exists:schools,id'],
+            'image_id' => ['required', 'integer', 'exists:images,id']
         ];
     }
 }
