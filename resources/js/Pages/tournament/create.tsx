@@ -85,7 +85,6 @@ export default function Create({ auth, participants }: PageProps<{ participants:
                                         <option key={participant.id} value={participant.id}>{participant.name} {participant.lastname}</option>
                                     ))}
                                 </select>
-                                <IconButton icon={<Plus className="text-xl" />} text="Create tournament" onClick={() => { }} />
                             </div>
                             {data.tournamentParticipants.length === 0 ?
                                 <div className="flex items-center justify-center h-full">
