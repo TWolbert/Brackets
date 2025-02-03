@@ -12,5 +12,11 @@ class Tournament extends Model
         'name',
         'start_date',
         'end_date',
+        'host_id',
+        'round_number'
     ];
+
+    public function tournament_match() {
+        return $this->hasMany(TournamentMatch::class);
+    }
 }

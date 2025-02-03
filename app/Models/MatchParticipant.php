@@ -8,7 +8,11 @@ class MatchParticipant extends Model
 {
     protected $fillable = [
         'participant_id',
-        'match_id',
+        'tournament_match_id',
         'participant_score'
     ];
+
+    public function participant() {
+        return $this->belongsTo(Participant::class);
+    }
 }

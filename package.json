@@ -27,6 +27,8 @@
     "dependencies": {
         "countries-list": "^3.1.1",
         "fast-xml-parser": "^4.5.1",
+        "jotai": "^2.11.3",
+        "jotai-effect": "^1.1.6",
         "react-bootstrap-icons": "^1.11.5",
         "react-toastify": "^11.0.3"
     }

@@ -15,7 +15,7 @@ class XMLController extends Controller
      */
     public function index()
     {
-        return Inertia::render('xml/index');
+
     }
 
     /**
@@ -23,7 +23,7 @@ class XMLController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('xml/index');
     }
 
     /**
@@ -40,7 +40,7 @@ class XMLController extends Controller
             $school = School::where('name', $schoolname)->first();
             if (is_null($school)) {
                 // Return redirect with error
-                return redirect()->route('xml.index')->with('error', 'School ' . $schoolname . ' not found');
+                return redirect()->route('xml.create')->with('error', 'School ' . $schoolname . ' not found');
             } 
             
             // Check if player exists
@@ -66,7 +66,7 @@ class XMLController extends Controller
         }   
 
         // Return redirect with success
-        return redirect()->route('xml.index')->with('success', true);
+        return redirect()->route('xml.create')->with('success', true);
     }
 
     /**

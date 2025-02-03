@@ -12,3 +12,26 @@ export type Participant = {
     school: School;
     image_id: number;
 }
+
+export type Tournament = {
+    id: number;
+    name: string;
+    start_date: string;
+    end_date: string;
+    round_number: number;
+}
+
+export type Match = {
+    id: number;
+    tournament_id: number;
+    match_participants: MatchParticipant[];
+}
+
+export type MatchParticipant = {
+    id: number;
+    participant_id: number;
+    participant: Participant;
+    tournament_match_id: number;
+    tournament_match: Match;
+    participant_score: number;
+}

@@ -18,20 +18,20 @@ export default function Authenticated({
     return (
         <div className="min-h-screen bg-gray-100">
             <ToastContainer />
-            <nav className="bg-white border-b border-gray-100">
-                <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <nav>
+                <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8 rounded-b-lg shadow-md bg-white">
                     <div className="flex justify-between h-16">
                         <div className="flex">
                             <div className="flex items-center shrink-0">
-                                <Link href="/">
+                                <Link href={route('dashboard.index')}>
                                     <ApplicationLogo className="block w-auto text-gray-800 fill-current h-9" />
                                 </Link>
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
+                                    href={route('dashboard.index')}
+                                    active={route().current('dashboard.index')}
                                 >
                                     Dashboard
                                 </NavLink>
@@ -47,6 +47,16 @@ export default function Authenticated({
                                 >
                                     Schools
                                 </NavLink>
+                                <NavLink
+                                    href={route('tournament.index')}
+                                    active={route().current('tournament.index')}
+                                >
+                                    Tournaments
+                                </NavLink>
+
+                                {header && !route().current()?.includes('index') && (
+                                    <NavLink active href={document.location.href}>{header}</NavLink>
+                                )}
                             </div>
                         </div>
 
@@ -146,7 +156,7 @@ export default function Authenticated({
                 >
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
-                            href={route('dashboard')}
+                            href={route('dashboard.index')}
                             active={route().current('dashboard')}
                         >
                             Dashboard
@@ -178,14 +188,6 @@ export default function Authenticated({
                     </div>
                 </div>
             </nav>
-
-            {header && (
-                <header className="bg-white shadow">
-                    <div className="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
-                        {header}
-                    </div>
-                </header>
-            )}
 
             <main>{children}</main>
         </div>

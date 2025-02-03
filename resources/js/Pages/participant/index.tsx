@@ -19,7 +19,8 @@ export default function Index({ auth, participants }: PageProps<{ participants: 
             <div className="mx-auto p-3 mt-3 gap-3 w-fit">
                 <div className=" flex flex-row gap-2 items-center mb-2">
                     <h1 className="font-bold text-xl">Participants ({participants.length})</h1>
-                    <Link href={route('xml.index')} className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 flex flex-row gap-2 items-center"><FiletypeXml /> Import using XML</Link>
+                    <Link href={route('xml.create')} className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 flex flex-row gap-2 items-center"><FiletypeXml /> Import using XML</Link>
+                    <Link href={route('participant.create')} className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 flex flex-row gap-2 items-center"><FiletypeXml /> Create participant</Link>
                 </div>
                 <div className="grid grid-cols-3 w-fit gap-3">
                     {participants.map((participant) => (

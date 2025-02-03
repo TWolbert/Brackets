@@ -93,31 +93,29 @@ export default function Index() {
     }
 
     return (
-        <>
-            <Authenticated header={<h1>Import using XML</h1>}>
-                <div className="flex items-center gap-3 p-3 mx-auto mt-3 bg-white rounded-md shadow-md w-fit">
-                    {/* File upload for XML */}
-                    <input type="file" onChange={handleFileChange} className='p-2 border-gray-300 rounded-md shadow-sm file:px-3 file:border-none file:text-white file:rounded-md file:shadow-md file:py-2 file:bg-blue-500 focus:border-indigo-500 focus:ring-indigo-500 ' />
-                    <form onSubmit={handleFormSubmit}>
-                        <input type="text" value={data.xmlData} hidden name="xmlData" readOnly />
-                        <IconButton disabled={!allowUpload} className=" disabled:opacity-50 disabled:cursor-not-allowed" icon={<Plus className="text-xl" />} onClick={() => { }} text="Upload XML" />
-                    </form>
+        <Authenticated header={<h1>Import using XML</h1>}>
+            <div className="flex items-center gap-3 p-3 mx-auto mt-3 bg-white rounded-md shadow-md w-fit">
+                {/* File upload for XML */}
+                <input type="file" onChange={handleFileChange} className='p-2 border-gray-300 rounded-md shadow-sm file:px-3 file:border-none file:text-white file:rounded-md file:shadow-md file:py-2 file:bg-blue-500 focus:border-indigo-500 focus:ring-indigo-500 ' />
+                <form onSubmit={handleFormSubmit}>
+                    <input type="text" value={data.xmlData} hidden name="xmlData" readOnly />
+                    <IconButton disabled={!allowUpload} className=" disabled:opacity-50 disabled:cursor-not-allowed" icon={<Plus className="text-xl" />} onClick={() => { }} text="Upload XML" />
+                </form>
+            </div>
+
+            <div className="mx-auto mt-3 w-fit">
+                {data.xmlData && <p className="p-3 font-bold bg-white rounded-md shadow-md">{participant.length} contestants found</p>}
+                <div className="grid grid-cols-3 gap-3 mt-2">
+                    {participant.map((contestant) => (
+                        <div className="p-3 bg-white rounded-md shadow-md" key={contestant.name + contestant.lastname}>
+                            <p>{contestant.name} {contestant.lastname}</p>
+                            <p>{contestant.school}</p>
+                        </div>
+                    ))}
                 </div>
 
-                <div className="mx-auto mt-3 w-fit">
-                    {data.xmlData && <p className="p-3 font-bold bg-white rounded-md shadow-md">{participant.length} contestants found</p>}
-                    <div className="grid grid-cols-3 gap-3 mt-2">
-                        {participant.map((contestant) => (
-                            <div className="p-3 bg-white rounded-md shadow-md" key={contestant.name + contestant.lastname}>
-                                <p>{contestant.name} {contestant.lastname}</p>
-                                <p>{contestant.school}</p>
-                            </div>
-                        ))}
-                    </div>
+            </div>
 
-                </div>
-
-            </Authenticated>
-        </>
+        </Authenticated>
     )
 }
