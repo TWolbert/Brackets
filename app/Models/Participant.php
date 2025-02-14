@@ -13,7 +13,6 @@ class Participant extends Model
         'name',
         'lastname',
         'school_id',
-        'image_id'
     ];
 
     public function school()

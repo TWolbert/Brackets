@@ -13,7 +13,6 @@ export default function Create({ auth, schools }: PageProps<{ schools: School[] 
         name: '',
         lastname: '',
         school_id: 0,
-        image_id: 1
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -42,7 +41,6 @@ export default function Create({ auth, schools }: PageProps<{ schools: School[] 
                         <option key={school.id} value={school.id}>{school.name}</option>
                     ))}
                 </select>
-                <input type="hidden" name="image_id" value={data.image_id} />
                 <IconButton disabled={processing} icon={<PersonAdd className="text-xl" />} className="w-full mt-2" text="Create participant" onClick={() => { }} />
             </form>
         </AuthenticatedLayout>

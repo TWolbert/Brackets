@@ -59,7 +59,6 @@ class XMLController extends Controller
                 'name' => $player->spelervoornaam,
                 'lastname' => $player->spelertussenvoegsels ? '' . $player->spelerachternaam : '',	
                 'school_id' => $school->id,
-                'image_id' => 1
             ]);
 
             $participant->save();

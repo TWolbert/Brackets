@@ -9,9 +9,10 @@ use App\Models\Participant;
 use App\Models\Tournament;
 use App\Models\TournamentMatch;
 use App\Models\TournamentWinner;
-use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class TournamentController extends Controller
@@ -21,8 +22,11 @@ class TournamentController extends Controller
      */
     public function index()
     {
+        $tournaments = Cache::rememberForever("tournaments", function () { 
+            return Tournament::all();
+        });
         return Inertia::render("tournament/index", [
-            "tournaments" => Tournament::all(),
+            "tournaments" => $tournaments
         ]);
     }
 
@@ -97,6 +101,8 @@ class TournamentController extends Controller
                 'participant_score' => 0,
             ]);
         }
+
+        Cache::forget('tournaments');
 
         return redirect(route('tournament.index'));
     }
