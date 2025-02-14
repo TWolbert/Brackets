@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
 Route::post('/school/exists', [SchoolController::class, 'doesSchoolExistByName'])->name('school.exists');
 
 Route::resource('tournament', TournamentController::class);
+Route::post('tournament/save-round', [TournamentController::class, 'saveRound'])->name('tournament.save-round');
 Route::resource('participant', ParticipantController::class);
 Route::resource('match-participant', MatchParticipant::class);
 Route::resource('school', SchoolController::class);

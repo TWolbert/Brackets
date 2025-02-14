@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreRoundRequest;
 use App\Http\Requests\TournamentCreateRequest;
 use App\Models\MatchParticipant;
 use App\Models\Participant;
 use App\Models\Tournament;
 use App\Models\TournamentMatch;
+use App\Models\TournamentWinner;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -97,6 +100,121 @@ class TournamentController extends Controller
 
         return redirect(route('tournament.index'));
     }
+    // export interface TournamentRoundResults {
+    //     id: number;
+    //     score1: number;
+    //     score2: number;
+    // }
+    public function saveRound(StoreRoundRequest $request)
+    {
+        DB::transaction(function () use ($request) {
+            $tournament = Tournament::findOrFail($request->validated('tournament_id'));
+
+            if ($tournament->host_id != Auth::id()) {
+                abort(403, 'You are not authorized to perform this action.');
+            }
+
+            $winners = [];
+
+            $results = $request->validated('results');
+
+            foreach ($results as $result) {
+                $match = TournamentMatch::where('id', $result['id'])->first();
+                $participants = $match->match_participants;
+
+                if ($participants->count() === 2) {
+                    $participants[0]->participant_score = $result['score1'];
+                    $participants[0]->save();
+
+                    $participants[1]->participant_score = $result['score2'];
+                    $participants[1]->save();
+
+                    $winner_id = -1;
+
+                    if ($result['score1'] > $result['score2']) {
+                        $winner_id = $participants[0]->participant_id;
+                    } else if ($result['score1'] < $result['score2']) {
+                        $winner_id = $participants[1]->participant_id;
+                    }
+
+                    $winners = [...$winners, $winner_id];
+
+                    $match->winner_id = $winner_id;
+                    $match->save();
+                } else {
+                    $participants[0]->participant_score = $result['score1'];
+                    $participants[0]->save();
+
+                    $match->winner_id = $participants[0]->participant_id;
+                    $match->save();
+
+                    $winners = [...$winners, $participants[0]->participant_id];
+                }
+            }
+
+            $newParticipants = Participant::whereIn('id', $winners)->get();
+
+            if ($newParticipants->count() > 1) {
+                // Extract the IDs from the Participant models
+                $participantIds = $newParticipants->pluck('id')->toArray();
+                shuffle($participantIds);
+
+                $participantCount = count($participantIds);
+                // Calculate the next power of two to determine if we need to add byes
+                $nextPowerOfTwo = pow(2, ceil(log($participantCount, 2)));
+                $numberOfByes = $nextPowerOfTwo - $participantCount;
+
+                // Determine participants receiving byes (if any)
+                $participantsWithByes = array_splice($participantIds, 0, $numberOfByes);
+                $remainingParticipants = $participantIds; // Participants to be paired
+
+                // Pair up the remaining participants into matches
+                for ($i = 0; $i < count($remainingParticipants); $i += 2) {
+                    $match = TournamentMatch::create([
+                        'tournament_id' => $tournament->id,
+                    ]);
+
+                    // Add the first participant to the match
+                    MatchParticipant::create([
+                        'participant_id' => $remainingParticipants[$i],
+                        'tournament_match_id' => $match->id,
+                        'participant_score' => 0,
+                    ]);
+
+                    // Add the second participant if available
+                    if (isset($remainingParticipants[$i + 1])) {
+                        MatchParticipant::create([
+                            'participant_id' => $remainingParticipants[$i + 1],
+                            'tournament_match_id' => $match->id,
+                            'participant_score' => 0,
+                        ]);
+                    }
+                }
+
+                // Create matches for participants with byes
+                foreach ($participantsWithByes as $byeParticipantId) {
+                    $match = TournamentMatch::create([
+                        'tournament_id' => $tournament->id,
+                    ]);
+
+                    MatchParticipant::create([
+                        'participant_id' => $byeParticipantId,
+                        'tournament_match_id' => $match->id,
+                        'participant_score' => 0,
+                    ]);
+                }
+            } else {
+                TournamentWinner::create([
+                    'tournament_id' => $tournament->id,
+                    'participant_id' => $newParticipants[0]->id,
+                ]);
+            }
+
+
+            $tournament->round_number += 1;
+            $tournament->save();
+        });
+    }
 
 
     /**
@@ -104,11 +222,16 @@ class TournamentController extends Controller
      */
     public function show(Tournament $tournament)
     {
-        $matches = $tournament->tournament_match()->with('match_participants.participant')->get();
-
+        $matches = $tournament->tournament_match()->with(relations: 'match_participants.participant')->whereNull('winner_id')->get();
+        $winner_id = TournamentWinner::where('tournament_id', $tournament->id)->first();
+        $winner = null;
+        if ($winner_id) { 
+            $winner = Participant::where('id', $winner_id->participant_id)->first();
+        }
         return Inertia::render('tournament/show', [
             'tournament' => $tournament,
             'matches' => $matches,
+            'won' => $winner
         ]);
     }
 

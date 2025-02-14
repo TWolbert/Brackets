@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateParticipantRequest;
+use App\Http\Requests\UpdateParticipantRequest;
 use App\Models\Participant;
 use App\Models\School;
 use Illuminate\Http\Request;
@@ -49,15 +50,19 @@ class ParticipantController extends Controller
      */
     public function edit(Participant $participant)
     {
-        //
+        return Inertia::render("participant/edit", [ 
+            "participant"=> $participant->load("school"),
+            'schools' => School::all(),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Participant $participant)
+    public function update(UpdateParticipantRequest $request, Participant $participant)
     {
-        //
+        $participant->update($request->validated());
+        return redirect(route("participant.index"))->with("success",true);
     }
 
     /**

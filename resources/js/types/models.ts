@@ -19,6 +19,7 @@ export type Tournament = {
     start_date: string;
     end_date: string;
     round_number: number;
+    host_id: number;
 }
 
 export type Match = {
